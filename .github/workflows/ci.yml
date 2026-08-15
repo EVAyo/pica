@@ -6,26 +6,27 @@ on:
   schedule:
     - cron: '0 0 * * 3'
 
+permissions:
+  contents: read
+
 jobs:
   test:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [ '14' ]
-
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+    - name: Use Node.js LTS
+      uses: actions/setup-node@v7
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: lts/*
+        cache: npm
 
-    - run: npm install
+    - run: npm ci
 
-    - name: Run headless test
-      uses: GabrielBB/xvfb-action@v1
-      with:
-        run: npm test
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps chromium
+
+    - name: Test
+      run: npm test

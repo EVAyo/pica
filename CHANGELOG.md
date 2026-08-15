@@ -6,6 +6,59 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [10.0.3] - 2026-08-15
+### Fixed
+- Fixed a regression causing tile border artifacts in Chrome when resizing in
+  web workers, #258.
+
+
+## [10.0.2] - 2026-06-26
+### Changed
+- Create canvas contexts with `{ willReadFrequently: true }` to improve speed
+  and suppress chrome warnings
+
+
+## [10.0.1] - 2026-05-18
+### Added
+- Added package export subpaths for split/browser builds
+  (`pica/pica_main`, `pica/pica_worker`, `pica/browser`).
+
+### Changed
+- Build `dist/` on package creation instead of keeping generated files in the
+  repository.
+- Make inlined worker always minified.
+- Updated `glur` to v2 and `multimath` to v3.
+
+
+## [10.0.0] - 2026-05-16
+### Fixed
+- Worked around bug in Chrome `createImageBitmap` for images with Exif
+  orientation.
+- Fixed Safari agent detection.
+
+### Added
+- Added split builds (`pica_main` + `pica_worker`) and `workerURL` option.
+- Added ESM builds.
+- Added new feature detection module and a debug page for it.
+
+### Changed
+- Migrated to classes. Library now exports factory `pica(options)` as default
+  and `Pica` class as a named export.
+- Removed ancient browsers support (IE < Edge and so on).
+- Moved sources to TypeScript and modern tooling (Vite build,
+  Vitest + Playwright tests).
+- Removed `createCanvas` option. Expose `OffscreenCanvas` to global instead,
+  if required.
+- Bundle webworker as string in combined builds. Should fix side effects in
+  external bundlers.
+- Removed deprecated positional `quality` argument from
+  `resize(from, to, quality)`. Use `resize(from, to, { quality })` or `filter`
+  option instead. Numeric `options.quality` is still accepted but deprecated —
+  use `filter`.
+- Removed implicit pool/limiter sharing between multiple `Pica` instances.
+  Create a single instance and reuse it.
+
+
 ## [9.0.1] - 2021-12-14
 ### Fixed
 - Fixed feature test in `ServiceWorker`, #255.
@@ -33,12 +86,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.1.0] - 2021-06-21
 ### Changed
-- In FireFox experimental resist fingerprinting mode `pica.resize()` now returns an error
-  instead of returning random data, nodeca/image-blob-reduce#28.
+- In FireFox experimental resist fingerprinting mode `pica.resize()` now returns
+  an error instead of returning random data, nodeca/image-blob-reduce#28.
 
 ### Fixed
-- Images with Exif orientation are now resized correctly in Chromium-based browsers
-  (it was previously broken in pica 7.0.0), #211.
+- Images with Exif orientation are now resized correctly in Chromium-based
+  browsers (it was previously broken in pica 7.0.0), #211.
 
 
 ## [7.0.0] - 2021-05-23
@@ -324,6 +377,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - First release.
 
 
+[10.0.3]: https://github.com/nodeca/pica/compare/10.0.2...10.0.3
+[10.0.2]: https://github.com/nodeca/pica/compare/10.0.1...10.0.2
+[10.0.1]: https://github.com/nodeca/pica/compare/10.0.0...10.0.1
+[10.0.0]: https://github.com/nodeca/pica/compare/9.0.1...10.0.0
 [9.0.1]: https://github.com/nodeca/pica/compare/9.0.0...9.0.1
 [9.0.0]: https://github.com/nodeca/pica/compare/8.0.0...9.0.0
 [8.0.0]: https://github.com/nodeca/pica/compare/7.1.1...8.0.0
